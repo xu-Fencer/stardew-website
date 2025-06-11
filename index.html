@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>星露谷物语 · 首页</title>
+  <!-- 像素中文字体 -->
+  <link rel="stylesheet" href="https://chinese-fonts-cdn.deno.dev/packages/jpdzt/dist/BoutiqueBitmap9x9_1_6/result.css" />
+  <style>
+    /* —— 全局自定义光标 —— */
+    html, body, a, button, .music-icon, .close-music {
+      cursor: url('static/img/guangbiao24x30.png') 0 0, auto;
+    }
+
+    /* —— 基础布局 —— */
+    html,
+    body { height: 100%; margin: 0; }
+    body {
+      display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+      background: url("https://stardewvalleywiki.com/mediawiki/extensions/StardewValley/images/stardewbackground.png") center/cover no-repeat fixed;
+      overflow: hidden; font-family: 'BoutiqueBitmap9x9 1.6 R', monospace; position: relative;
+    }
+
+    /* —— 夜空星点 —— */
+    .star-field { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
+    .star-field::before, .star-field::after {
+      content:""; position:absolute; inset:0; width:1px; height:1px; background:transparent;
+      box-shadow:var(--stars-small); animation:twinkle 4s linear infinite;
+    }
+    .star-field::after { box-shadow:var(--stars-large); animation-duration:6s; }
+    @keyframes twinkle {0%,100%{opacity:.8;} 50%{opacity:.2;}}
+    :root { --stars-small:10vw 10vh #fff,20vw 20vh #fff,30vw 35vh #fff,40vw 25vh #fff,50vw 40vh #fff,60vw 15vh #fff,70vw 30vh #fff,80vw 18vh #fff,90vw 12vh #fff,95vw 45vh #fff; --stars-large:15vw 5vh #fff,25vw 28vh #fff,35vw 12vh #fff,65vw 8vh #fff,75vw 42vh #fff; }
+
+    /* —— 固定像素云 —— */
+    .clouds { position:absolute; inset:0; pointer-events:none; z-index:2; overflow:hidden; }
+    .clouds img { position:absolute; width:92px; height:60px; image-rendering:pixelated; }
+
+    /* —— LOGO —— */
+    .logo { position:relative; margin-top:40px; z-index:3; }
+    .logo img {
+      width:45vw; max-width:600px; display:block; margin:0 auto; image-rendering:pixelated;
+      /* 不可选中与拖拽 */
+      -webkit-user-select:none; -moz-user-select:none; -ms-user-select:none; user-select:none;
+      -webkit-user-drag:none; pointer-events:auto;
+    }
+    @media(max-width:600px){ .logo img{ width:100vw;} }
+
+    /* —— 菜单按钮 —— */
+    .menu { position:absolute; bottom:60px; display:flex; gap:32px; z-index:3; }
+    .menu button {
+      width:150px; padding:24px 0; font-size:18px; border:4px solid #a26230; background:#f3c173; color:#69330e;
+      border-radius:8px; cursor:pointer; box-shadow:0 0 0 3px #753e17 inset, 0 4px 0 #a26230, 0 6px 6px rgba(0,0,0,.25);
+      transition:transform .2s ease-out;
+    }
+    .menu button:hover{ transform:scale(1.1);}  
+    @media(max-width:600px){
+      .menu{ flex-wrap:wrap; gap:20px; bottom:40px; }
+      .menu button{ flex:1 1 calc(50% - 20px); width:auto; padding:18px 0; font-size:16px; }
+    }
+
+    /* —— 音乐开关 —— */
+    .music-icon {
+      position:fixed; right:16px; bottom:16px; z-index:4; width:40px; height:40px;
+      background:#f3c173; border:4px solid #a26230; border-radius:8px; display:flex; align-items:center; justify-content:center;
+      font-size:20px; color:#69330e; cursor:pointer; box-shadow:0 0 0 3px #753e17 inset,0 4px 0 #a26230,0 6px 6px rgba(0,0,0,.25);
+    }
+    .music-container {
+      position:fixed; right:16px; bottom:16px; z-index:4; width:330px; height:86px; display:none;
+      box-shadow:0 0 0 3px #753e17 inset,0 4px 0 #a26230,0 6px 6px rgba(0,0,0,.25); border-radius:8px; background:#f3c173;
+    }
+    .music-container iframe { width:100%; height:100%; border:none; }
+    .close-music {
+      position:absolute; top:-10px; right:-10px; width:24px; height:24px; border:2px solid #a26230; border-radius:50%; background:#f3c173;
+      font-size:16px; line-height:20px; color:#69330e; cursor:pointer; display:flex; align-items:center; justify-content:center;
+      box-shadow:0 2px 4px rgba(0,0,0,.3);
+    }
+    /* 隐藏开关和播放器于移动端 */
+    @media(max-width:600px){ .music-icon, .music-container{ display:none !important;} }
+  </style>
+</head>
+<body>
+  <div class="star-field"></div>
+
+  <!-- LOGO -->
+  <div class="logo"><img src="static/img/poplogo.png" alt="星露谷物语 Logo" id="logoImg" draggable="false"/></div>
+
+  <!-- 云朵 -->
+  <div class="clouds">
+    <img src="static/img/trcloud.png" alt="cloud"/>
+    <img src="static/img/trcloud.png" alt="cloud"/>
+    <img src="static/img/trcloud.png" alt="cloud"/>
+    <img src="static/img/trcloud.png" alt="cloud"/>
+    <img src="static/img/trcloud.png" alt="cloud"/>
+  </div>
+
+  <!-- 菜单按钮 -->
+  <div class="menu">
+    <button>创建</button>
+    <button>加载</button>
+    <button>合作</button>
+    <button>退出</button>
+  </div>
+
+  <!-- 音乐开关图标 -->
+  <div class="music-icon" id="musicIcon">🎵</div>
+
+  <!-- 音乐播放器容器 -->
+  <div class="music-container" id="musicContainer">
+    <iframe src="//music.163.com/outchain/player?type=2&id=408277037&auto=0&height=66"></iframe>
+    <div class="close-music" id="closeMusic">×</div>
+  </div>
+
+  <!-- JS：随机云朵位置 & 音乐切换 -->
+  <script>
+    document.addEventListener('DOMContentLoaded',()=>{
+      // 随机云朵位置
+      document.querySelectorAll('.clouds img').forEach(c=>{
+        c.style.left=Math.random()*100+'%';
+        c.style.top=(10+Math.random()*70)+'%';
+      });
+      // 音乐开关
+      const icon=document.getElementById('musicIcon');
+      const box=document.getElementById('musicContainer');
+      const close=document.getElementById('closeMusic');
+      icon.addEventListener('click',()=>{ icon.style.display='none'; box.style.display='block'; });
+      close.addEventListener('click',()=>{ box.style.display='none'; icon.style.display='flex'; });
+      // 禁止 logo 右键菜单
+      const logo=document.getElementById('logoImg');
+      if(logo){ logo.addEventListener('contextmenu',e=>e.preventDefault()); }
+    });
+  </script>
+</body>
+</html>
